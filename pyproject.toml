@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "explained-faiss"
+version = "0.1.0"
+description = "FAISS search service (:8001) and index builder for the explAIned recommendation loop"
+authors = ["explAIned"]
+readme = "README.md"
+packages = [{ include = "explained_faiss", from = "src" }]
+
+[tool.poetry.dependencies]
+# faiss-cpu publishes wheels for cp312/cp313; 3.14 has none yet.
+python = ">=3.12,<3.14"
+faiss-cpu = "^1.9"
+numpy = "^2.1"
+fastapi = "^0.115"
+uvicorn = { extras = ["standard"], version = "^0.32" }
+redis = "^5.2"
+pydantic = "^2.9"
+pydantic-settings = "^2.6"
+prometheus-fastapi-instrumentator = "^7.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3"
+pytest-asyncio = "^0.24"
+httpx = "^0.27"
+ruff = "^0.7"
+
+[tool.poetry.scripts]
+build-index = "explained_faiss.jobs.build_index:cli"
+seed-dev-embeddings = "explained_faiss.scripts.seed_dev_embeddings:cli"
+
+[build-system]
+requires = ["poetry-core>=1.9"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 110
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
