@@ -12,6 +12,9 @@ RUN pip install "poetry>=1.8"
 COPY pyproject.toml poetry.lock* ./
 RUN poetry install --only main --no-root
 
+# README.md is not documentation here: pyproject declares `readme`, and poetry-core refuses to
+# build the root package if the file is missing.
+COPY README.md ./
 COPY src ./src
 RUN poetry install --only-root
 
